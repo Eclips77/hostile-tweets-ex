@@ -4,7 +4,7 @@ import json
 
 class TweetProcessingManager:
     """
-    מנג'ר פשוט לעיבוד tweets - מפעיל דאל ופרוסס ומחזיר JSON
+    manager class of the dal and processing classes
     """
     
     def __init__(self):
@@ -13,8 +13,7 @@ class TweetProcessingManager:
     
     def process_all_tweets(self):
         """
-        שולף את כל הטוויטים מהדאטאבייס ומעבד אותם
-        מחזיר: JSON עם כל המידע המעובד
+        procssing all the tweets from the db
         """
         dataframe = self.fetcher.fetch_all_tweets()
         
