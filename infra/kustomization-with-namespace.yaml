@@ -16,4 +16,5 @@ labels:
       app: tweet-processor
       project: hostile-tweets-ex
 
-namespace: lkey09211-dev
+# Use a project-specific namespace to avoid permission issues
+namespace: tweet-processor

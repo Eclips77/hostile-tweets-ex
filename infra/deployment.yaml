@@ -18,16 +18,16 @@ spec:
     spec:
       containers:
         - name: tweet-processor
-          image: docker.io/johnlenon003/api-processor:v2
+          image: docker.io/johnlenon003/api-processor:v3
           ports:
             - containerPort: 8000
               name: http
           env:
-            - name: USER
+            - name: MONGO_USER
               valueFrom:
                 secretKeyRef:
                   name: mongo-credentials
-                  key: USER
+                  key: MONGO_USER
             - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -59,16 +59,16 @@ spec:
             httpGet:
               path: /
               port: 8000
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /
               port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
       restartPolicy: Always

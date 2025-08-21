@@ -9,8 +9,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('tweet_processing.log'),
-        logging.StreamHandler()
+        logging.StreamHandler()  # Only console logging to avoid permission issues in containers
     ]
 )
 
