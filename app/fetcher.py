@@ -2,9 +2,9 @@ from app.connection import DatabaseConnection
 from typing import List, Optional
 from data import config
 import logging
+import pandas as pd
 
 logger = logging.getLogger(__name__)
-
 class FetcherDal:
     """Data Access Layer for fetching tweet data from mongodb ."""
     def __init__(self):
@@ -15,7 +15,7 @@ class FetcherDal:
         self.database = self.connection.connect()
         self.collection = self.database[config.MONGODB_COLLECTION]
     
-    def fetch_all_tweets(self)-> list:
+    def fetch_all_tweets(self)-> pd.DataFrame:
         """
         Get all tweets from the database
         
@@ -24,10 +24,10 @@ class FetcherDal:
         """
         try:
             results = self.collection.find({},{"_id":0})
-            return [doc for doc in results]
+            return pd.DataFrame([doc for doc in results])
         except Exception as e:
             logger.exception(f"Error getting all tweets: {e}")
-            return []
+            return pd.DataFrame()
 
     def close_connection(self):
         """
