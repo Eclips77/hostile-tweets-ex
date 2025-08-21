@@ -50,4 +50,11 @@ class TweetsProcessor:
             return "neutral text"
         
     def extract_weapon_names(self):
-        pass
+        with open('data/weapons.txt', 'r') as file:
+            weaponsList = {line.strip() for line in file}
+        matches = []
+        all_words = ' '.join(self.df[self.message_column].dropna()).split()
+        for item in all_words:
+            if item.lower() in weaponsList:
+                matches.append(item)
+        return matches
