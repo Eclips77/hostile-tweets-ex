@@ -12,7 +12,7 @@ class TweetsProcessor:
     """
     a processing class for tweets data
     """
-    def __init__(self,dataframe,column):
+    def __init__(self,dataframe,column="Text"):
         self.df = dataframe
         self.message_column = column
 

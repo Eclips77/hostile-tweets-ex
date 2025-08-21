@@ -37,9 +37,7 @@ class FetcherDal:
         logger.info("connection close secssefuly")
 
 
-
-if __name__ == "__main__":
-    dal = FetcherDal()
-    x = dal.fetch_all_tweets()
-    print(x.head(10))
-    
+# if __name__ == "__main__":
+#     dal = FetcherDal()
+#     x = dal.fetch_all_tweets()
+#     print(x.head(10))
