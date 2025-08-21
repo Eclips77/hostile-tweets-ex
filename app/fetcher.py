@@ -27,6 +27,11 @@ class FetcherDal:
             print(f"Error getting all tweets: {e}")
             return []
 
+    def close_connection(self):
+        """
+        Close database connection
+        """
+        self.connection.disconnect()
 
 if __name__ == "__main__":
     dal = FetcherDal()
