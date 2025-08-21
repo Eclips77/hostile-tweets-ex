@@ -33,6 +33,8 @@ class FetcherDal:
         """
         self.connection.disconnect()
 
+
+
 if __name__ == "__main__":
     dal = FetcherDal()
     x = dal.fetch_all_tweets()
