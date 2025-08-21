@@ -66,7 +66,7 @@ class TweetsProcessor:
                 matches.append(item)
         return matches[0]
 
-    def analyze_dataframe(self, df, text_column: str = 'text'):
+    def analyze_dataframe(self,text_column: str = 'text'):
         """
         Analyze Twitter tweets DataFrame
         
@@ -77,12 +77,12 @@ class TweetsProcessor:
         Returns:
             List of dictionaries with processed data
         """
-        if text_column not in df.columns:
+        if text_column not in self.df.columns:
             raise ValueError(f"Column '{text_column}' not found in DataFrame")
         
         results = []
         
-        for index, row in df.iterrows():
+        for index, row in self.df.iterrows():
             original_text = str(row[text_column]) if row[text_column] is not None else ""
             
             rarest_word = self._find_rarest_word(original_text)
