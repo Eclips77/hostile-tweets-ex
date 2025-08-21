@@ -28,4 +28,9 @@ class FetcherDal:
             return []
 
 
-     
+if __name__ == "__main__":
+    dal = FetcherDal()
+    x = dal.fetch_all_tweets()
+    for doc in x:
+        print(doc)
+    
