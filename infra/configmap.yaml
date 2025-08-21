@@ -5,13 +5,10 @@ metadata:
   labels:
     app: tweet-processor
 data:
-  # Application configuration
   LOG_LEVEL: "INFO"
   API_TITLE: "Malicious Text Feature Engineering System"
   API_VERSION: "1.0.0"
-  # FastAPI configuration
   HOST: "0.0.0.0"
   PORT: "8000"
-  # Processing configuration
   BATCH_SIZE: "100"
   TIMEOUT: "30"
