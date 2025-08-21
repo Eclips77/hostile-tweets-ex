@@ -11,3 +11,6 @@ class FetcherDal:
         self.connection = DatabaseConnection()
         self.database = self.connection.connect()
         self.collection = self.database[config.MONGODB_COLLECTION]
+    
+    def fetch_all_tweets(self):
+        pass
