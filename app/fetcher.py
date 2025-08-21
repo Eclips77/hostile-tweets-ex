@@ -13,7 +13,7 @@ class FetcherDal:
         self.database = self.connection.connect()
         self.collection = self.database[config.MONGODB_COLLECTION]
     
-    def fetch_all_tweets(self):
+    def fetch_all_tweets(self)-> list:
         """
         Get all tweets from the database
         
@@ -35,9 +35,8 @@ class FetcherDal:
 
 
 
-if __name__ == "__main__":
-    dal = FetcherDal()
-    x = dal.fetch_all_tweets()
-    for doc in x:
-        print(doc)
+# if __name__ == "__main__":
+#     dal = FetcherDal()
+#     x = dal.fetch_all_tweets()
+#     print(len(x))
     
