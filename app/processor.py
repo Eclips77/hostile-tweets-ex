@@ -68,21 +68,46 @@ class TweetsProcessor:
     
     def _initialize_sentiment_analyzer(self):
         """Initialize sentiment analyzer once during initialization with detailed logging"""
-        logger.info("Downloading VADER lexicon for sentiment analysis...")
+        logger.info("Initializing VADER sentiment analyzer...")
         
         try:
-            nltk.download('vader_lexicon', quiet=True)
-            logger.info("VADER lexicon downloaded successfully")
+            import os
+            nltk_data_dirs = [
+                '/usr/local/share/nltk_data',
+                '/app/nltk_data',
+                os.path.expanduser('~/nltk_data'),
+                '/tmp/nltk_data'
+            ]
+            
+            for data_dir in nltk_data_dirs:
+                if data_dir not in nltk.data.path:
+                    nltk.data.path.append(data_dir)
+            
+            logger.info(f"NLTK data paths: {nltk.data.path}")
+            
+            try:
+                nltk.download('vader_lexicon', quiet=True)
+                logger.info("VADER lexicon download completed")
+            except Exception as download_error:
+                logger.warning(f"Could not download VADER lexicon: {download_error}")
             
             analyzer = SentimentIntensityAnalyzer()
+            
             logger.info("SentimentIntensityAnalyzer initialized successfully")
+            
             return analyzer
             
         except Exception as e:
             logger.error(f"Could not initialize sentiment analyzer: {str(e)}")
             logger.error(f"Error type: {type(e).__name__}")
-            logger.warning("Sentiment analysis will not be available")
-            return None
+            logger.error("Full traceback:", exc_info=True)
+            logger.warning("Sentiment analysis will not be available - returning fallback analyzer")
+            
+            class FallbackAnalyzer:
+                def polarity_scores(self, text):
+                    return {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+            
+            return FallbackAnalyzer()
 
     def _find_rarest_word(self, text: str) -> str:
         """
@@ -133,12 +158,12 @@ class TweetsProcessor:
         logger.debug("Starting sentiment analysis...")
         
         if not self.sia:
-            logger.warning("Sentiment analyzer not available, returning 'unknown'")
-            return "unknown"
+            logger.warning("Sentiment analyzer not available, returning 'neutral'")
+            return "neutral"
         
-        if not text:
-            logger.warning("Empty text provided for sentiment analysis")
-            return "unknown"
+        if not text or not text.strip():
+            logger.debug("Empty text provided for sentiment analysis")
+            return "neutral"
         
         try:
             scores = self.sia.polarity_scores(text)
@@ -151,7 +176,7 @@ class TweetsProcessor:
         except Exception as e:
             logger.error(f"Error during sentiment analysis: {str(e)}")
             logger.error(f"Error type: {type(e).__name__}")
-            return "error"
+            return "neutral"
     
     def _classify_sentiment(self, compound_score)-> str:
         """

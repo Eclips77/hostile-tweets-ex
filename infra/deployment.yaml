@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: tweet-processor
-          image: docker.io/johnlenon003/api-processor:v3
+          image: docker.io/johnlenon003/api-processor:v4
           ports:
             - containerPort: 8000
               name: http
