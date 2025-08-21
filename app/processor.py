@@ -10,17 +10,12 @@ class TweetsProcessor:
         self.df = dataframe
         self.message_column = column
 
-    def get_most_common_words(self,top_n=1) -> dict:
-        """Returns a dictionary containing the  most common word in the tweets column.
-        This method concatenates all the tweets, splits them into words, counts their occurrences,
-        and returns the top N most common words.
-        Args:
-            top_n (int): The number of most common words to return. Default is 1.
-        """
-            
-        all_words = ' '.join(self.df[self.message_column].dropna())
-        word_counts = Counter(all_words.split())
-        return dict(word_counts.most_common(top_n))
+    def most_rare_word(self,row):
+        words = row.str.cat(sep=' ').split()  
+        word_counts = Counter(words) 
+        min_count = min(word_counts.values())
+        rare_words = [word for word, count in word_counts.items() if count == min_count]
+        return rare_words
 
     def get_sentiments(self):
         """
@@ -50,7 +45,7 @@ class TweetsProcessor:
             return "neutral text"
         
     def extract_weapon_names(self):
-        with open('data/weapons.txt', 'r') as file:
+        with open('data.weapons.txt', 'r') as file:
             weaponsList = {line.strip() for line in file}
         matches = []
         all_words = ' '.join(self.df[self.message_column].dropna()).split()
