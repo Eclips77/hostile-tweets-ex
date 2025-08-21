@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-processor
+  template:
+    metadata:
+      labels:
+        app: data-processor
+    spec:
+      containers:
+        - name: data-processor
+          image: docker.io/johnlenon003/tweets-processor:v1
+          ports:
+            - containerPort: 8000
+          env:
+            - name: USER
+              value: "IRGC"
+            - name: MONGO_CONNECTION_STRING
+              value: "mongodb+srv://IRGC:iraniraniran@iranmaldb.gurutam.mongodb.net/"
+            - name: MONGO_DB_NAME
+              value: "iranmaldb"
+            - name: MONGODB_COLLECTION
+              value: "tweets"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-processor
+spec:
+  selector:
+    app: data-processor
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP
