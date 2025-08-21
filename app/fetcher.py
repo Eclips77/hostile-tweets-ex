@@ -3,6 +3,8 @@ from typing import List, Optional
 from data import config
 import logging
 
+logger = logging.getLogger(__name__)
+
 class FetcherDal:
     """Data Access Layer for fetching tweet data from mongodb ."""
     def __init__(self):
@@ -24,7 +26,7 @@ class FetcherDal:
             results = self.collection.find({},{"_id":0})
             return [doc for doc in results]
         except Exception as e:
-            print(f"Error getting all tweets: {e}")
+            logger.exception(f"Error getting all tweets: {e}")
             return []
 
     def close_connection(self):
@@ -32,6 +34,7 @@ class FetcherDal:
         Close database connection
         """
         self.connection.disconnect()
+        logger.info("connection close secssefuly")
 
 
 
