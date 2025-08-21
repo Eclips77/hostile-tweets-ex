@@ -1,7 +1,7 @@
 from regex import F
 from app.fetcher import FetcherDal
 from app.processor import TweetsProcessor
-import pandas as pd
+# import pandas as pd
 
 
 fetcher = FetcherDal()
