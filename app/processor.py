@@ -1,7 +1,8 @@
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-import pandas
+import re
 from collections import Counter
+from models.process_data_model import ProcessTweet
 class TweetsProcessor:
     """
     a processing class for tweets data
@@ -10,14 +11,25 @@ class TweetsProcessor:
         self.df = dataframe
         self.message_column = column
 
-    def most_rare_word(self,row):
-        words = row.str.cat(sep=' ').split()  
-        word_counts = Counter(words) 
-        min_count = min(word_counts.values())
-        rare_words = [word for word, count in word_counts.items() if count == min_count]
-        return rare_words
+    def _find_rarest_word(self, text: str) -> str:
+        """
+        find the rarest word in a tweet       
+        Args:
+            text: tweet text
+            
+        Returns:
+                most rarest word
+        """
+        if not text:
+            return ""
+        words = re.findall(r'\b\w+\b', text.lower())
+        if not words:
+            return ""
+        word_count = Counter(words)
+        rarest_word = min(word_count.keys(), key=lambda x: (word_count[x], words.index(x)))
+        return rarest_word
 
-    def get_sentiments(self):
+    def _get_sentiments(self):
         """
         Analyze the sentiments of the tweets in the dataframe.
         """
@@ -44,7 +56,7 @@ class TweetsProcessor:
         else:
             return "neutral text"
         
-    def extract_weapon_names(self):
+    def _extract_weapon_names(self) -> str:
         with open('data.weapons.txt', 'r') as file:
             weaponsList = {line.strip() for line in file}
         matches = []
@@ -52,4 +64,37 @@ class TweetsProcessor:
         for item in all_words:
             if item.lower() in weaponsList:
                 matches.append(item)
-        return matches
+        return matches[0]
+
+    def analyze_dataframe(self, df, text_column: str = 'text'):
+        """
+        Analyze Twitter tweets DataFrame
+        
+        Args:
+            df: DataFrame with tweets
+            text_column: Name of the column containing the text (default: 'text')
+            
+        Returns:
+            List of dictionaries with processed data
+        """
+        if text_column not in df.columns:
+            raise ValueError(f"Column '{text_column}' not found in DataFrame")
+        
+        results = []
+        
+        for index, row in df.iterrows():
+            original_text = str(row[text_column]) if row[text_column] is not None else ""
+            
+            rarest_word = self._find_rarest_word(original_text)
+            sentiment = self._get_sentiments()
+            weapons_list = self._extract_weapon_names()
+            result_dict = ProcessTweet(
+                original_text= original_text,
+                rarest_word= rarest_word,
+                sentiment= sentiment,
+                weapons_detected= weapons_list
+            )
+            
+            results.append(result_dict)
+        
+        return results
