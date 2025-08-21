@@ -1,16 +1,19 @@
+# This file is deprecated - use deployment.yaml instead
+# Keeping for reference only
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: data-processor
+  name: data-processor-legacy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: data-processor
+      app: data-processor-legacy
   template:
     metadata:
       labels:
-        app: data-processor
+        app: data-processor-legacy
     spec:
       containers:
         - name: data-processor
@@ -31,10 +34,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: data-processor
+  name: data-processor-legacy
 spec:
   selector:
-    app: data-processor
+    app: data-processor-legacy
   ports:
     - port: 8000
       targetPort: 8000
