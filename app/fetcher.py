@@ -1,5 +1,5 @@
 from app.connection import DatabaseConnection
-from typing import List, Optional
+from typing import Optional
 from data import config
 import logging
 import pandas as pd
@@ -20,7 +20,7 @@ class FetcherDal:
         Get all tweets from the database
         
         Returns:
-            List of all tweets
+            DataFrame of all tweets
         """
         try:
             results = self.collection.find({},{"_id":0})
@@ -38,8 +38,8 @@ class FetcherDal:
 
 
 
-# if __name__ == "__main__":
-#     dal = FetcherDal()
-#     x = dal.fetch_all_tweets()
-#     print(len(x))
+if __name__ == "__main__":
+    dal = FetcherDal()
+    x = dal.fetch_all_tweets()
+    print(x.head(10))
     
